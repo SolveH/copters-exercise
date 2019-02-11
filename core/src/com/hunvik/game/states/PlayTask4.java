@@ -15,6 +15,10 @@ public class PlayTask4 extends State {
     private PongLine linePlayer;
     private PongLineAI lineAI;
     private BitmapFont font;
+    private int scoreAI;
+    private int scorePlayer;
+    float time = 0;
+    float newtime = 0;
 
     public PlayTask4(GameStateManager gsm) {
         super(gsm);
@@ -42,6 +46,7 @@ public class PlayTask4 extends State {
     @Override
     public void update(float dt) {
         handleInput();
+        time += dt;
         ball.update(dt);
         lineAI.update(dt);
         linePlayer.update(dt);
@@ -50,10 +55,19 @@ public class PlayTask4 extends State {
         }else if(ball.getBounds().overlaps(linePlayer.getBounds())){
             ball.changeDirection();
         }
-        if(ball.getScoreAI() > 20){
+        ball.addObserver((obj, arg) -> {
+            if(arg == "aiscore" && time-newtime > 1){
+                newtime = time;
+                scoreAI++;
+            }else if(arg == "playerscore" && time - newtime > 1){
+                newtime = time;
+                scorePlayer++;
+            }
+        });
+        if(scoreAI > 20){
             gsm.set(new WinnerState(gsm, "ai"));
             dispose();
-        }else if(ball.getScorePlayer() > 20){
+        }else if(scorePlayer > 20){
             gsm.set(new WinnerState(gsm, "player"));
             dispose();
         }
@@ -68,8 +82,8 @@ public class PlayTask4 extends State {
         sb.draw(lineAI.getLine(), lineAI.getPosition().x, lineAI.getPosition().y);
         sb.draw(ball.getBall(), ball.getPosition().x, ball.getPosition().y);
         sb.draw(linePlayer.getLine(), linePlayer.getPosition().x, linePlayer.getPosition().y);
-        font.draw(sb, Integer.toString(ball.getScoreAI()), 30, Exercise1.HEIGHT - 50);
-        font.draw(sb, Integer.toString(ball.getScorePlayer()), 30, 50);
+        font.draw(sb, Integer.toString(scoreAI), 30, Exercise1.HEIGHT - 50);
+        font.draw(sb, Integer.toString(scorePlayer), 30, 50);
         sb.end();
     }
 

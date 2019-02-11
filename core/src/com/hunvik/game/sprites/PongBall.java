@@ -3,13 +3,12 @@ package com.hunvik.game.sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.hunvik.game.Exercise1;
+import java.util.Observable;
 
-public class PongBall {
+public class PongBall extends Observable{
     private static final int VELOCITY = 5;
     private Vector2 position;
     private Vector2 velocity;
@@ -24,8 +23,12 @@ public class PongBall {
     private boolean down;
     private Rectangle bounds;
 
+
     private int scoreAI;
     private int scorePlayer;
+
+    float time = 0;
+    float newtime = 0;
 
     private static final PongBall INSTANCE = new PongBall(200, Exercise1.HEIGHT / 2);
 
@@ -45,11 +48,15 @@ public class PongBall {
     }
 
     public void update(float dt){
+        time += dt;
+        float diff = time - newtime;
         if(position.y <= 0) {
-            scoreAI++;
+            setChanged();
+            notifyObservers("aiscore");
             position.set(initialX, initialY);
         }else if(position.y >= Exercise1.HEIGHT - sprite.getHeight()){
-            scorePlayer++;
+            setChanged();
+            notifyObservers("playerscore");
             position.set(initialX, initialY);
         }
         if(position.x <= 0 || position.x >= Exercise1.WIDTH - sprite.getWidth()){
