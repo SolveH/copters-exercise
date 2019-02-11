@@ -27,7 +27,9 @@ public class PongBall {
     private int scoreAI;
     private int scorePlayer;
 
-    public PongBall(int x, int y){
+    private static final PongBall INSTANCE = new PongBall(200, Exercise1.HEIGHT / 2);
+
+    private PongBall(int x, int y){
         initialX = x;
         initialY = y;
         position = new Vector2(x,y);
@@ -91,5 +93,10 @@ public class PongBall {
 
     public void dispose(){
         ball.dispose();
+    }
+
+    //From exercise 2
+    public static PongBall getInstance(){
+        return INSTANCE;
     }
 }

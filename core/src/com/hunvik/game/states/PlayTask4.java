@@ -18,7 +18,7 @@ public class PlayTask4 extends State {
 
     public PlayTask4(GameStateManager gsm) {
         super(gsm);
-        ball = new PongBall(200, Exercise1.HEIGHT / 2);
+        ball = PongBall.getInstance();
         lineAI = new PongLineAI(40, Exercise1.HEIGHT - 25);
         linePlayer = new PongLine(40, 5);
         font = new BitmapFont();
